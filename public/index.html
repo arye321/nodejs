@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Check Username</title>
+</head>
+<body>
+  <h1>Check Username</h1>
+  <form id="myForm" onsubmit="return checkUsername(event)">
+    <input type="text" id="usernameInput" placeholder="Enter username" autofocus>
+    <input type="submit" value="lets go baby" id="myButton" >
+
+  </form>
+  <p id="statusMessage"></p>
+
+  <script>
+    function checkUsername(e) {
+        e.preventDefault();
+      const username = document.getElementById('usernameInput').value;
+
+      fetch('/checkUsername', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          const statusMessage = document.getElementById('statusMessage');
+          if (data.status === 'approved') {
+            statusMessage.textContent = `Username "${username}" is approved!`;
+          } else {
+            statusMessage.textContent = `Username "${username}" is not approved.`;
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+  </script>
+</body>
+</html>
